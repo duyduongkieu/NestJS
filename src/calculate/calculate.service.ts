@@ -1,5 +1,5 @@
 import { NUMBER } from './../../API/number';
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException } from '@nestjs/common';
 
 @Injectable()
 export class CalculateService {
@@ -8,7 +8,11 @@ export class CalculateService {
     return this.number;
   }
   calculation(a, b) {
-    this.number.push({ status: true, add: a + b, substract: a - b });
-    return this.number;
+    if (Number.isNaN(a) || Number.isNaN(b)) {
+      throw new HttpException('a or b is not number', 404);
+    } else {
+      this.number.push({ status: true, add: a + b, substract: a - b });
+      return this.number;
+    }
   }
 }
